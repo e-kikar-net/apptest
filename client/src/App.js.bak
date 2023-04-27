@@ -1,0 +1,51 @@
+import React, { useState, useEffect } from 'react';
+
+function App() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async() => {
+            try {
+                const response = await fetch("http://localhost:5000/api");
+                const data = await response.json();
+                setUsers(data.users);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const intervalId = setInterval(() => {
+            fetchData();
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    return ( <
+        div >
+        <
+        h1 > Users < /h1> <
+        table >
+        <
+        thead >
+        <
+        tr >
+        <
+        th > Name < /th> <
+        /tr> <
+        /thead> <
+        tbody > {
+            users.map((user, index) => ( <
+                tr key = { index } >
+                <
+                td > { user.name } < /td> <
+                /tr>
+            ))
+        } <
+        /tbody> <
+        /table> <
+        /div>
+    );
+}
+
+export default App;
